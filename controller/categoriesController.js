@@ -9,7 +9,7 @@ router.get('/', (req,res)=>{
     var query = {}
     if(pageSize && currentPage){
         query.skip = pageSize * (currentPage - 1)
-  query.limit = pageSize
+        query.limit = pageSize
         Category.find({},{},query, function(err,data) {
             if(!err){
                 res.send(data)
@@ -18,7 +18,6 @@ router.get('/', (req,res)=>{
                 console.log("Error:" + JSON.stringify(err,undefined,2));
             }
         })
-       
     }
     else{
     Category.find((err,doc)=>{
@@ -31,6 +30,7 @@ router.get('/', (req,res)=>{
     })
 }
 })
+
 router.post('/', (req,res)=>{
     var content = new Category ({
         categoryname : req.body.categoryname

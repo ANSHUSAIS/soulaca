@@ -10,6 +10,7 @@ const aws = require('aws-sdk');
 const multerS3 = require('multer-s3');
 const path = require( 'path' );
 const mongoose = require ('mongoose');
+const { Subcategory } = require('../model/subcategory');
 const mime_type ={
     "image/png" : "png",
     "image/jpg" : 'jpg',
@@ -139,6 +140,9 @@ router.get('',(req, res)=>{
             }).populate({
                 path: 'category',
                 model: Category
+        }).populate({
+            path: 'subcategory',
+            model: Subcategory
         })
         }
     })
@@ -168,6 +172,7 @@ router.post('', upload.any(), (req,res)=>{
     var product = new Product({
         productname : req.body.productname,
         category : req.body.category,
+        subcategory : req.body.subcategory,
         size : req.body.size,
         shortdescription: req.body.shortdescription,
         shortfeatures : req.body.shortfeatures,
@@ -204,25 +209,25 @@ router.put(
     "/:id",
     upload.any(),
     (req, res, next) => {
-    
         if (req.files) {
             let fileArray = req.files,
             fileLocation;
             galleryImgLocationArray = [];
           
-        for ( let i = 0; i < fileArray.length; i++ ) {
-         fileLocation = fileArray[ i ].location;
-    
-         console.log( 'filenm', fileLocation );
-         galleryImgLocationArray.push( fileLocation )
-        }
+            for ( let i = 0; i < fileArray.length; i++ ) {
+            fileLocation = fileArray[ i ].location;
+        
+            console.log( 'filenm', fileLocation );
+            galleryImgLocationArray.push( fileLocation )
+            }
       
           }
-      console.log(req.body.shortfeatures);
+ 
       const product = {
         _id: req.body.id,
         productname : req.body.productname,
         category : req.body.category,
+        subcategory : req.body.subcategory,
         size : req.body.size,
         shortdescription : req.body.shortdescription,
         shortfeatures : req.body.shortfeatures,
@@ -271,7 +276,7 @@ router.put(
 })
 
 router.get('/category/:id',(req, res)=>{
-        Product.find(  {categories: req.params.id }  ,(err,docs)=>{
+        Product.find(  {category: req.params.id }  ,(err,docs)=>{
             if(!err){
                 res.send(docs);
                console.log(docs); 
@@ -283,6 +288,21 @@ router.get('/category/:id',(req, res)=>{
             path: 'category',
             model: Category
        })
+})
+
+router.get('/subcategory/:id',(req, res)=>{
+    Product.find( {subcategory: req.params.id }  ,(err,docs)=>{
+        if(!err){
+            res.send(docs);
+           console.log(docs); 
+        }
+        else{
+            console.log('Error is fetching products:' +  JSON.stringify(err,undefined,2));
+        }
+    }).sort({productname : 'asc'}).populate({
+        path: 'category',
+        model: Category
+   })
 })
 
 router.get('/search/:searchQuery',(req, res)=>{

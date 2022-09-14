@@ -7,6 +7,7 @@ app.use(bodyparser.json());
 const mongoose = require('mongoose');
 var aboutusController = require('./controller/aboutusController');
 var categoryController = require('./controller/categoriesController');
+var subcategoriesController = require('./controller/subcategoriesController');
 var jobsController = require('./controller/jobController');
 var blogsController =  require ('./controller/blogsController');
 var bannerController = require ('./controller/bannerController');
@@ -22,7 +23,8 @@ var promotionController = require('./controller/promotionController');
 var contentController = require('./controller/contentController');
 mongoose
   .connect(
-    "mongodb+srv://manoj:kwpFdlge7lANXh7P@cluster0-m1jet.mongodb.net/test?retryWrites=true&w=majority"
+    // "mongodb+srv://manoj:kwpFdlge7lANXh7P@cluster0-m1jet.mongodb.net/test?retryWrites=true&w=majority"
+    "mongodb+srv://mongodbuser:3918aKFkUYMx5eOP@cluster0.a1jsexj.mongodb.net/test?retryWrites=true&w=majority"
     , { useNewUrlParser: true })
   .then(() => {
     console.log("Connected to database!");
@@ -52,6 +54,7 @@ app.listen(port , ()=>{
 app.use(secure);
 app.use('/api/aboutus', aboutusController);
 app.use('/api/category', categoryController);
+app.use('/api/subcategory', subcategoriesController);
 app.use('/api/jobs', jobsController);
 app.use('/api/blogs', blogsController);
 app.use('/api/comments', commentController);
