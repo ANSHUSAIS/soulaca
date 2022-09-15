@@ -65,7 +65,7 @@ router.get('',(req, res)=>{
         }).populate({
             path: 'category',
             model: Category
-       })
+       }).sort({_id : 'desc'})
        
     }
     else{
@@ -79,7 +79,7 @@ router.get('',(req, res)=>{
         }).sort({productname : 'asc'}).populate({
             path: 'category',
             model: Category
-       })
+       }).sort({_id : 'desc'})
     }
 
 })
@@ -111,9 +111,6 @@ router.get('',(req, res)=>{
 //     }
 
 // })
-
-
-
     router.get('',(req, res)=>{
         Product.find( {'Isfeatured': true} ,(err,docs)=>{
             if(!err){
@@ -150,6 +147,34 @@ router.get('',(req, res)=>{
 
 router.post('', upload.any(), (req,res)=>{
     // const url = req.protocol + "://" + req.get("host");
+
+    const productFinder = {
+        model_number : req.body.model_number,
+        display_size : req.body.display_size,
+        front_pane : req.body.front_pane,
+        resolution : req.body.resolution,
+        dust_proof : req.body.dust_proof,
+        wall_mount : req.body.wall_mount,
+        visa_pattern : req.body.visa_pattern,
+        connections : req.body.connections,
+        speaker : req.body.speaker,
+        operating_systems : req.body.operating_systems,
+        storage : req.body.storage,
+        tv_power : req.body.tv_power,
+        remote_control_supplied : req.body.remote_control_supplied,
+        tv_dimesions : req.body.tv_dimesions,
+        recess_wall_dimensions : req.body.recess_wall_dimensions,
+        parking_includes : req.body.parking_includes,
+        special_features : req.body.special_features,
+        tunner : req.body.tunner,
+        mouse_pointer : req.body.mouse_pointer,
+        voice_control : req.body.voice_control,
+        touch_keys : req.body.touch_keys,
+        touch_screen : req.body.touch_screen,
+        wifi : req.body.wifi,
+        brightness : req.body.brightness
+      }
+
     if (req.files) {
         let fileArray = req.files,
         fileLocation;
@@ -162,13 +187,6 @@ router.post('', upload.any(), (req,res)=>{
     }
   
       }
-    //  if(req.body.colors) {
-    //      let allcolors = req.body.colors;
-    //      imagecolors = [];
-    //      for (let i = 0; i< allcolors.length ; i++){
-    //         imagecolors.push(allcolors);
-    //      }
-    //  }
     var product = new Product({
         productname : req.body.productname,
         category : req.body.category,
@@ -193,7 +211,8 @@ router.post('', upload.any(), (req,res)=>{
         },
         videopath : req.body.videopath,
         productdetails : req.body.productdetails,
-        Isfeatured : req.body.Isfeatured
+        Isfeatured : req.body.Isfeatured,
+        product_finder : productFinder
     })
     product.save((err,docs)=>{
         if(!err){
@@ -203,6 +222,148 @@ router.post('', upload.any(), (req,res)=>{
             console.log('Error in saving blog :' +JSON.stringify(err, undefined,2));
         }
     })
+})
+
+// Product Finder
+
+router.post('/product-finder', async (req,res)=>{
+
+    let query = {};
+
+    if(req.body.category !== ''){
+        query.category = req.body.category;
+    }
+
+    if(req.body.model_number !== ''){
+        query.model_number = req.body.model_number;
+    }
+
+    if(req.body.display_size !== ''){
+        query.display_size = req.body.display_size;
+    }
+
+    if(req.body.front_pane !== ''){
+        query.front_pane = req.body.front_pane;
+    }
+
+    if(req.body.resolution !== ''){
+        query.resolution = req.body.resolution;
+    }
+
+    if(req.body.dust_proof !== ''){
+        query.dust_proof = req.body.dust_proof;
+    }
+
+    if(req.body.wall_mount !== ''){
+        query.wall_mount = req.body.wall_mount;
+    }
+
+    if(req.body.visa_pattern !== ''){
+        query.visa_pattern = req.body.visa_pattern;
+    }
+
+    if(req.body.connections !== ''){
+        query.connections = req.body.connections;
+    }
+
+    if(req.body.speaker !== ''){
+        query.speaker = req.body.speaker;
+    }
+
+    if(req.body.operating_systems !== ''){
+        query.operating_systems = req.body.operating_systems;
+    }
+
+    if(req.body.storage !== ''){
+        query.storage = req.body.storage;
+    }
+
+    if(req.body.tv_power !== ''){
+        query.tv_power = req.body.tv_power;
+    }
+
+    if(req.body.remote_control_supplied !== ''){
+        query.remote_control_supplied = req.body.remote_control_supplied;
+    }
+
+    if(req.body.tv_dimesions !== ''){
+        query.tv_dimesions = req.body.tv_dimesions;
+    }
+
+    if(req.body.recess_wall_dimensions !== ''){
+        query.recess_wall_dimensions = req.body.recess_wall_dimensions;
+    }
+
+    if(req.body.parking_includes !== ''){
+        query.parking_includes = req.body.parking_includes;
+    }
+
+    if(req.body.special_features !== ''){
+        query.special_features = req.body.special_features;
+    }
+
+    if(req.body.tunner !== ''){
+        query.tunner = req.body.tunner;
+    }
+
+    if(req.body.mouse_pointer !== ''){
+        query.mouse_pointer = req.body.mouse_pointer;
+    }
+
+    if(req.body.voice_control !== ''){
+        query.voice_control = req.body.voice_control;
+    }
+
+    if(req.body.touch_keys !== ''){
+        query.touch_keys = req.body.touch_keys;
+    }
+
+    if(req.body.touch_screen !== ''){
+        query.touch_screen = req.body.touch_screen;
+    }
+
+    if(req.body.wifi !== ''){
+        query.wifi = req.body.wifi;
+    }
+
+    if(req.body.brightness !== ''){
+        query.brightness = req.body.brightness;
+    }
+
+    
+    const productFinder = await Product.find(query);
+    console.log(productFinder);
+    res.json({data : productFinder});
+
+
+    // const productFinder = {
+    //     model_number : req.body.model_number,
+    //     display_size : req.body.display_size,
+    //     front_pane : req.body.front_pane,
+    //     resolution : req.body.resolution,
+    //     dust_proof : req.body.dust_proof,
+    //     wall_mount : req.body.wall_mount,
+    //     visa_pattern : req.body.visa_pattern,
+    //     connections : req.body.connections,
+    //     speaker : req.body.speaker,
+    //     operating_systems : req.body.operating_systems,
+    //     storage : req.body.storage,
+    //     tv_power : req.body.tv_power,
+    //     remote_control_supplied : req.body.remote_control_supplied,
+    //     tv_dimesions : req.body.tv_dimesions,
+    //     recess_wall_dimensions : req.body.recess_wall_dimensions,
+    //     parking_includes : req.body.parking_includes,
+    //     special_features : req.body.special_features,
+    //     tunner : req.body.tunner,
+    //     mouse_pointer : req.body.mouse_pointer,
+    //     voice_control : req.body.voice_control,
+    //     touch_keys : req.body.touch_keys,
+    //     touch_screen : req.body.touch_screen,
+    //     wifi : req.body.wifi,
+    //     brightness : req.body.brightness
+    //   }
+
+    
 })
 
 router.put(
@@ -221,6 +382,33 @@ router.put(
             galleryImgLocationArray.push( fileLocation )
             }
       
+          }
+
+          const productFinder = {
+            model_number : req.body.model_number,
+            display_size : req.body.display_size,
+            front_pane : req.body.front_pane,
+            resolution : req.body.resolution,
+            dust_proof : req.body.dust_proof,
+            wall_mount : req.body.wall_mount,
+            visa_pattern : req.body.visa_pattern,
+            connections : req.body.connections,
+            speaker : req.body.speaker,
+            operating_systems : req.body.operating_systems,
+            storage : req.body.storage,
+            tv_power : req.body.tv_power,
+            remote_control_supplied : req.body.remote_control_supplied,
+            tv_dimesions : req.body.tv_dimesions,
+            recess_wall_dimensions : req.body.recess_wall_dimensions,
+            parking_includes : req.body.parking_includes,
+            special_features : req.body.special_features,
+            tunner : req.body.tunner,
+            mouse_pointer : req.body.mouse_pointer,
+            voice_control : req.body.voice_control,
+            touch_keys : req.body.touch_keys,
+            touch_screen : req.body.touch_screen,
+            wifi : req.body.wifi,
+            brightness : req.body.brightness
           }
  
       const product = {
@@ -248,7 +436,8 @@ router.put(
         },
         videopath : req.body.videopath,
         productdetails : req.body.productdetails,
-        Isfeatured : req.body.Isfeatured
+        Isfeatured : req.body.Isfeatured,
+        product_finder : productFinder
       };
       console.log(product);
         Product.findByIdAndUpdate(req.params.id, {$set:product}, {new:true}, (err,doc)=>{
