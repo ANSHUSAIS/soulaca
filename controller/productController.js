@@ -224,146 +224,84 @@ router.post('', upload.any(), (req,res)=>{
     })
 })
 
+// Get Product Finder
+router.post('/get-productfinder', async (req, res, next)=>{
+    const products = await Product.find({
+        _id: {
+            $in: req.body
+        }
+    });
+
+    if(!products){
+        res.json({ message : 'No Products Found', code : 404, data : []});
+    }
+
+    res.json({ message : 'Success', code : 200, data : products});
+});
+
 // Product Finder
 
 router.post('/product-finder', async (req,res)=>{
 
-    let query = {};
-
-    if(req.body.category !== ''){
-        query.category = req.body.category;
-    }
-
-    if(req.body.model_number !== ''){
-        query.model_number = req.body.model_number;
-    }
-
-    if(req.body.display_size !== ''){
-        query.display_size = req.body.display_size;
-    }
-
-    if(req.body.front_pane !== ''){
-        query.front_pane = req.body.front_pane;
-    }
-
-    if(req.body.resolution !== ''){
-        query.resolution = req.body.resolution;
-    }
-
-    if(req.body.dust_proof !== ''){
-        query.dust_proof = req.body.dust_proof;
-    }
-
-    if(req.body.wall_mount !== ''){
-        query.wall_mount = req.body.wall_mount;
-    }
-
-    if(req.body.visa_pattern !== ''){
-        query.visa_pattern = req.body.visa_pattern;
-    }
-
-    if(req.body.connections !== ''){
-        query.connections = req.body.connections;
-    }
-
-    if(req.body.speaker !== ''){
-        query.speaker = req.body.speaker;
-    }
-
-    if(req.body.operating_systems !== ''){
-        query.operating_systems = req.body.operating_systems;
-    }
-
-    if(req.body.storage !== ''){
-        query.storage = req.body.storage;
-    }
-
-    if(req.body.tv_power !== ''){
-        query.tv_power = req.body.tv_power;
-    }
-
-    if(req.body.remote_control_supplied !== ''){
-        query.remote_control_supplied = req.body.remote_control_supplied;
-    }
-
-    if(req.body.tv_dimesions !== ''){
-        query.tv_dimesions = req.body.tv_dimesions;
-    }
-
-    if(req.body.recess_wall_dimensions !== ''){
-        query.recess_wall_dimensions = req.body.recess_wall_dimensions;
-    }
-
-    if(req.body.parking_includes !== ''){
-        query.parking_includes = req.body.parking_includes;
-    }
-
-    if(req.body.special_features !== ''){
-        query.special_features = req.body.special_features;
-    }
-
-    if(req.body.tunner !== ''){
-        query.tunner = req.body.tunner;
-    }
-
-    if(req.body.mouse_pointer !== ''){
-        query.mouse_pointer = req.body.mouse_pointer;
-    }
-
-    if(req.body.voice_control !== ''){
-        query.voice_control = req.body.voice_control;
-    }
-
-    if(req.body.touch_keys !== ''){
-        query.touch_keys = req.body.touch_keys;
-    }
-
-    if(req.body.touch_screen !== ''){
-        query.touch_screen = req.body.touch_screen;
-    }
-
-    if(req.body.wifi !== ''){
-        query.wifi = req.body.wifi;
-    }
-
-    if(req.body.brightness !== ''){
-        query.brightness = req.body.brightness;
-    }
-
+    // Getting all the params
+    let query = {
+        category : req.body.category !== '' ? req.body.category : null,
+        'product_finder.model_number' : req.body.model_number,
+        'product_finder.display_size' : req.body.display_size,
+        'product_finder.front_pane' : req.body.front_pane,
+        'product_finder.resolution' : req.body.resolution,
+        'product_finder.dust_proof' : req.body.dust_proof,
+        'product_finder.wall_mount' : req.body.wall_mount,
+        'product_finder.visa_pattern' : req.body.visa_pattern,
+        'product_finder.connections' : req.body.connections,
+        'product_finder.speaker' : req.body.speaker,
+        'product_finder.operating_systems' : req.body.operating_systems,
+        'product_finder.storage' : req.body.storage,
+        'product_finder.tv_power' : req.body.tv_power,
+        'product_finder.remote_control_supplied' : req.body.remote_control_supplied,
+        'product_finder.tv_dimesions' : req.body.tv_dimesions,
+        'product_finder.recess_wall_dimensions' : req.body.recess_wall_dimensions,
+        'product_finder.parking_includes' : req.body.parking_includes,
+        'product_finder.special_features' : req.body.special_features,
+        'product_finder.tunner' : req.body.tunner,
+        'product_finder.mouse_pointer' : req.body.mouse_pointer,
+        'product_finder.voice_control' : req.body.voice_control,
+        'product_finder.touch_keys' : req.body.touch_keys,
+        'product_finder.touch_screen' : req.body.touch_screen,
+        'product_finder.wifi' : req.body.wifi,
+        'product_finder.brightness' : req.body.brightness,
+    };
     
-    const productFinder = await Product.find(query);
-    console.log(productFinder);
+    // Removing params if its null or blank
+    query.category == '' || query.category == null  ? delete query.category : '';
+    query['product_finder.model_number'] == '' || query['product_finder.model_number'] == null  ? delete query['product_finder.model_number'] : '';
+    query['product_finder.display_size'] == '' ||  query['product_finder.display_size'] == null ? delete query['product_finder.display_size'] : '';
+    query['product_finder.front_pane'] == '' || query['product_finder.front_pane'] == null ? delete query['product_finder.front_pane'] : '';
+    query['product_finder.resolution'] == '' || query['product_finder.resolution'] == null ? delete query['product_finder.resolution'] : '';
+    query['product_finder.dust_proof'] == '' || query['product_finder.dust_proof'] == null ? delete query['product_finder.dust_proof'] : '';
+    query['product_finder.wall_mount'] == '' || query['product_finder.wall_mount'] == null ? delete query['product_finder.wall_mount'] : '';
+    query['product_finder.visa_pattern'] == '' || query['product_finder.visa_pattern'] == null ? delete query['product_finder.visa_pattern'] : '';
+    query['product_finder.connections'] == '' || query['product_finder.connections'] == null ? delete query['product_finder.connections'] : '';
+    query['product_finder.speaker'] == '' || query['product_finder.speaker'] == null ? delete query['product_finder.speaker'] : '';
+    query['product_finder.operating_systems'] == '' || query['product_finder.operating_systems'] == null ? delete query['product_finder.operating_systems'] : '';
+    query['product_finder.storage'] == '' || query['product_finder.storage'] == null ? delete query['product_finder.storage'] : '';
+    query['product_finder.tv_power'] == '' || query['product_finder.tv_power'] == null ? delete query['product_finder.tv_power'] : '';
+    query['product_finder.remote_control_supplied'] == '' || query['product_finder.remote_control_supplied'] == null ? delete query['product_finder.remote_control_supplied'] : '';
+    query['product_finder.tv_dimesions'] == '' || query['product_finder.tv_dimesions'] == null ? delete query['product_finder.tv_dimesions'] : '';
+    query['product_finder.recess_wall_dimensions'] == '' || query['product_finder.recess_wall_dimensions'] == null ? delete query['product_finder.recess_wall_dimensions'] : '';
+    query['product_finder.parking_includes'] == '' || query['product_finder.parking_includes'] == null ? delete query['product_finder.parking_includes'] : '';
+    query['product_finder.special_features'] == '' || query['product_finder.special_features'] == null ? delete query['product_finder.special_features'] : '';
+    query['product_finder.tunner'] == '' || query['product_finder.tunner'] == null ? delete query['product_finder.tunner'] : '';
+    query['product_finder.mouse_pointer'] == '' || query['product_finder.mouse_pointer'] == null ? delete query['product_finder.mouse_pointer'] : '';
+    query['product_finder.voice_control'] == '' || query['product_finder.voice_control'] == null ? delete query['product_finder.voice_control'] : '';
+    query['product_finder.touch_keys'] == '' || query['product_finder.touch_keys'] == null ? delete query['product_finder.touch_keys'] : '';
+    query['product_finder.touch_screen'] == '' || query['product_finder.touch_screen'] == null ? delete query['product_finder.touch_screen'] : '';
+    query['product_finder.wifi'] == '' || query['product_finder.wifi'] == null ? delete query['product_finder.wifi'] : '';
+    query['product_finder.brightness'] == '' || query['product_finder.brightness'] == null ? delete query['product_finder.brightness'] : '';
+
+    const productFinder = await Product.find({ ...query });
+    console.log(query);
     res.json({data : productFinder});
-
-
-    // const productFinder = {
-    //     model_number : req.body.model_number,
-    //     display_size : req.body.display_size,
-    //     front_pane : req.body.front_pane,
-    //     resolution : req.body.resolution,
-    //     dust_proof : req.body.dust_proof,
-    //     wall_mount : req.body.wall_mount,
-    //     visa_pattern : req.body.visa_pattern,
-    //     connections : req.body.connections,
-    //     speaker : req.body.speaker,
-    //     operating_systems : req.body.operating_systems,
-    //     storage : req.body.storage,
-    //     tv_power : req.body.tv_power,
-    //     remote_control_supplied : req.body.remote_control_supplied,
-    //     tv_dimesions : req.body.tv_dimesions,
-    //     recess_wall_dimensions : req.body.recess_wall_dimensions,
-    //     parking_includes : req.body.parking_includes,
-    //     special_features : req.body.special_features,
-    //     tunner : req.body.tunner,
-    //     mouse_pointer : req.body.mouse_pointer,
-    //     voice_control : req.body.voice_control,
-    //     touch_keys : req.body.touch_keys,
-    //     touch_screen : req.body.touch_screen,
-    //     wifi : req.body.wifi,
-    //     brightness : req.body.brightness
-    //   }
-
-    
 })
 
 router.put(
