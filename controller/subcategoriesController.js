@@ -6,7 +6,6 @@ var {Subcategory} = require ('../model/subcategory');
 
 router.get('/', async (req, res, next)=>{
     try{
-        console.log(req.params.pageSize);
         const pageSize = +req.query.pageSize;
         const currentPage = +req.query.currentPage;
         let subcategories = [];
@@ -73,6 +72,29 @@ router.post('/', (req,res)=>{
         }
     })
 }) 
+
+
+router.put('/:id', (req,res)=>{
+    if(!objId.isValid(req.params.id)){
+        res.status(400).send(`The requested id is invalid : ${req.params.id}`);
+    }
+    else{
+        var content = {
+            subcategoryname : req.body.subcategoryname,
+            category : req.body.category,
+            categoryname : req.body.categoryname,
+        };
+
+        Subcategory.findByIdAndUpdate(req.params.id, {$set:content}, {new:true, useFindAndModify: false}, (err,doc)=>{
+            if(!err){
+                res.send(doc)
+            }
+            else{
+                console.log('error is updating data:' + JSON.stringify(err,undefined,2));
+            }
+        })
+    }
+})
 
 router.delete('/:id', (req,res)=>{
     if(!objId.isValid(req.params.id)){

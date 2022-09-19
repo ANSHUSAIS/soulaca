@@ -69,7 +69,7 @@ router.put('/:id', (req,res)=>{
         var content = {
             categoryname : req.body.categoryname
         }
-        Category.findByIdAndUpdate(req.params.id, {$set:content}, {new:true}, (err,doc)=>{
+        Category.findByIdAndUpdate(req.params.id, {$set:content}, {new:true, useFindAndModify: false}, (err,doc)=>{
             if(!err){
                 res.send(doc)
             }
