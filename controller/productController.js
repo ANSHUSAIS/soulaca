@@ -299,9 +299,11 @@ router.post('/product-finder', async (req,res)=>{
     query['product_finder.wifi'] == '' || query['product_finder.wifi'] == null ? delete query['product_finder.wifi'] : '';
     query['product_finder.brightness'] == '' || query['product_finder.brightness'] == null ? delete query['product_finder.brightness'] : '';
 
+    if(Object.keys(query).length === 0){
+        res.json({status : 404, message : 'No Column Selected...'});return;
+    }
     const productFinder = await Product.find({ ...query });
-    console.log(query);
-    res.json({data : productFinder});
+    res.json({status : 200, data : productFinder, message : 'No Column Selected...'});
 })
 
 router.put(
