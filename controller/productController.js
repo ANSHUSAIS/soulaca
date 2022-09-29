@@ -306,52 +306,49 @@ router.post('/product-finder', async (req,res)=>{
     res.json({status : 200, data : productFinder, message : 'No Column Selected...'});
 })
 
-router.put(
-    "/:id",
-    upload.any(),
-    (req, res, next) => {
-        if (req.files) {
-            let fileArray = req.files,
-            fileLocation;
-            galleryImgLocationArray = [];
-          
-            for ( let i = 0; i < fileArray.length; i++ ) {
-            fileLocation = fileArray[ i ].location;
-        
-            console.log( 'filenm', fileLocation );
-            galleryImgLocationArray.push( fileLocation )
-            }
-      
-          }
 
-          const productFinder = {
-            model_number : req.body.model_number,
-            display_size : req.body.display_size,
-            front_pane : req.body.front_pane,
-            resolution : req.body.resolution,
-            dust_proof : req.body.dust_proof,
-            wall_mount : req.body.wall_mount,
-            visa_pattern : req.body.visa_pattern,
-            connections : req.body.connections,
-            speaker : req.body.speaker,
-            operating_systems : req.body.operating_systems,
-            storage : req.body.storage,
-            tv_power : req.body.tv_power,
-            remote_control_supplied : req.body.remote_control_supplied,
-            tv_dimesions : req.body.tv_dimesions,
-            recess_wall_dimensions : req.body.recess_wall_dimensions,
-            parking_includes : req.body.parking_includes,
-            special_features : req.body.special_features,
-            tunner : req.body.tunner,
-            mouse_pointer : req.body.mouse_pointer,
-            voice_control : req.body.voice_control,
-            touch_keys : req.body.touch_keys,
-            touch_screen : req.body.touch_screen,
-            wifi : req.body.wifi,
-            brightness : req.body.brightness
-          }
- 
-      const product = {
+router.put(("/:id"), upload.any(), (req, res, next) => {
+    if (req.files) {
+        let fileArray = req.files,
+        fileLocation;
+        galleryImgLocationArray = [];
+      
+        for ( let i = 0; i < fileArray.length; i++ ) {
+        fileLocation = fileArray[ i ].location;
+    
+        console.log( 'filenm', fileLocation );
+        galleryImgLocationArray.push( fileLocation )
+        }
+    }
+
+    const productFinder = {
+        model_number : req.body.model_number,
+        display_size : req.body.display_size,
+        front_pane : req.body.front_pane,
+        resolution : req.body.resolution,
+        dust_proof : req.body.dust_proof,
+        wall_mount : req.body.wall_mount,
+        visa_pattern : req.body.visa_pattern,
+        connections : req.body.connections,
+        speaker : req.body.speaker,
+        operating_systems : req.body.operating_systems,
+        storage : req.body.storage,
+        tv_power : req.body.tv_power,
+        remote_control_supplied : req.body.remote_control_supplied,
+        tv_dimesions : req.body.tv_dimesions,
+        recess_wall_dimensions : req.body.recess_wall_dimensions,
+        parking_includes : req.body.parking_includes,
+        special_features : req.body.special_features,
+        tunner : req.body.tunner,
+        mouse_pointer : req.body.mouse_pointer,
+        voice_control : req.body.voice_control,
+        touch_keys : req.body.touch_keys,
+        touch_screen : req.body.touch_screen,
+        wifi : req.body.wifi,
+        brightness : req.body.brightness
+    }
+
+    const product = {
         _id: req.body.id,
         productname : req.body.productname,
         category : req.body.category,
@@ -378,9 +375,9 @@ router.put(
         productdetails : req.body.productdetails,
         Isfeatured : req.body.Isfeatured,
         product_finder : productFinder
-      };
-      console.log(product);
-        Product.findByIdAndUpdate(req.params.id, {$set:product}, {new:true}, (err,doc)=>{
+    };
+    console.log(product);
+    Product.findByIdAndUpdate(req.params.id, {$set:product}, {new:true}, (err,doc)=>{
         if(!err){
             res.send(doc)
         }
@@ -388,8 +385,7 @@ router.put(
             console.log('error is updating data:' + JSON.stringify(err,undefined,2));
         }
     })
-    }
-  );
+});
 
   router.get('/featured/lists',(req, res)=>{
 
