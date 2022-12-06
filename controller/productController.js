@@ -11,6 +11,7 @@ const multerS3 = require('multer-s3');
 const path = require( 'path' );
 const mongoose = require ('mongoose');
 const { Subcategory } = require('../model/subcategory');
+const { Productenquiry } = require('../model/productenquiry');
 const mime_type ={
     "image/png" : "png",
     "image/jpg" : 'jpg',
@@ -376,20 +377,18 @@ router.put(("/:id"), upload.any(), (req, res, next) => {
         Isfeatured : req.body.Isfeatured,
         product_finder : productFinder
     };
-    console.log(product);
+
     Product.findByIdAndUpdate(req.params.id, {$set:product}, {new:true}, (err,doc)=>{
         if(!err){
             res.send(doc)
         }
         else{
-            console.log('error is updating data:' + JSON.stringify(err,undefined,2));
+            console.log('error while updating data:' + JSON.stringify(err,undefined,2));
         }
     })
 });
 
   router.get('/featured/lists',(req, res)=>{
-
-    
     Product.find( {'Isfeatured': true} ,(err,docs)=>{
         if(!err){
             res.send(docs);
@@ -461,4 +460,55 @@ router.delete('/:id', (req,res)=>{
         })
     }
 })
+
+router.post('/popup-message', upload.any(), (req,res)=>{
+    try{
+        var productenquiry = new Productenquiry({
+            producturl  : req.body.product_url,
+            message  : req.body.message,
+            name  : req.body.name,
+            mobile  : req.body.mobile
+        })
+        productenquiry.save((err,docs)=>{
+            if(!err){
+                res.send(docs)
+            }
+            else{
+                console.log('Error in saving blog :' +JSON.stringify(err, undefined,2));
+            }
+        })
+    }catch(err){
+        console.log(err);
+    }
+})
+
+router.get('/data/enquiry',(req, res)=>{
+    const pageSize = +req.query.pageSize;
+    const currentPage = +req.query.currentPage
+    var query = {}
+    if(pageSize && currentPage){
+        query.skip = pageSize * (currentPage - 1)
+        query.limit = pageSize
+        Productenquiry.find({},{},query, function(err,data) {
+            if(!err){
+                res.send(data)
+            }
+            else{
+                console.log("Error:" + JSON.stringify(err,undefined,2));
+            }
+        }).sort({_id : -1})
+    }
+    else{
+        Productenquiry.find((err,docs)=>{
+            if(!err){
+                res.send(docs);
+            }
+            else{
+                console.log('Error is fetching blogs:' +  JSON.stringify(err,undefined,2));
+            }
+        })
+    }
+
+})
+
 module.exports = router
