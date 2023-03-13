@@ -18,8 +18,8 @@ const mime_type ={
     "image/gif" : 'gif'
 }
 aws.config.update({
-    secretAccessKey: 'Diiew/svkC3A6aRPVVoN3QhMSB8y+3A2EVQhzWsc',
-    accessKeyId: 'AKIAWX4GQKYJMZHZFSWH',
+    secretAccessKey: process.env.AWS_SECRET_KEY,
+    accessKeyId: process.env.AWS_SECRET_KEY_ID,
     region: 'ap-south-1'
 });
 
