@@ -51,6 +51,7 @@ app.use(function (req, res, next) {
 app.listen(port , ()=>{
     console.log('App is listing at port  :' + port)
 })
+
 app.use(secure);
 app.use('/api/aboutus', aboutusController);
 app.use('/api/category', categoryController);
