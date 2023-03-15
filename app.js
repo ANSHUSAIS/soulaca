@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyparser =  require('body-parser');
 var app = express();
+require('dotenv').config();
 const path = require('path');
 var secure = require('express-force-https');
 app.use(bodyparser.json());
@@ -21,6 +22,8 @@ var imageController = require('./controller/imageUploadController');
 var videoController = require('./controller/videoController');
 var promotionController = require('./controller/promotionController');
 var contentController = require('./controller/contentController');
+var corevalueController = require('./controller/corevaluesController');
+
 mongoose
   .connect(
     // "mongodb+srv://manoj:kwpFdlge7lANXh7P@cluster0-m1jet.mongodb.net/test?retryWrites=true&w=majority"
@@ -54,6 +57,7 @@ app.listen(port , ()=>{
 
 app.use(secure);
 app.use('/api/aboutus', aboutusController);
+app.use('/api/corevalues', corevalueController);
 app.use('/api/category', categoryController);
 app.use('/api/subcategory', subcategoriesController);
 app.use('/api/jobs', jobsController);

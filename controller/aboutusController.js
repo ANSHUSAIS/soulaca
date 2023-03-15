@@ -123,48 +123,48 @@ router.put('/:id', upload.array("image"), (req,res)=>{
         Aboutus.findById(req.params.id, (err,doc)=>{
             if(!err){
                 existingContent = doc;
+                let l_image = "";
+                if(images.left_content_image != ""){
+                    l_image = images.left_content_image;
+                }else{
+                    if(existingContent.left_content_image != undefined){
+                        l_image = existingContent.left_content_image
+                    }
+                }
+        
+                let r_image = "";
+                if(images.right_content_image != ""){
+                    r_image = images.right_content_image;
+                }else{
+                    if(existingContent.right_content_image != undefined){
+                        r_image = existingContent.right_content_image
+                    }
+                }
+                var content = {
+                    about_type : req.body.about_type,
+                    left_title : req.body.left_title,
+                    left_content_type : req.body.left_content_type,
+                    left_content_image : l_image,
+                    left_content_text : req.body.left_content_text,
+                    right_title : req.body.right_title,
+                    right_content_type : req.body.right_content_type,
+                    right_content_image : r_image,
+                    right_content_text : req.body.right_content_text,
+                }
+            
+                Aboutus.findByIdAndUpdate(req.params.id, {$set:content}, {new:true}, (err,doc)=>{
+                    if(!err){
+                        res.send(doc)
+                    }
+                    else{
+                        console.log('error is updating data:' + JSON.stringify(err,undefined,2));
+                    }
+                })
             }
             else{
                 console.log('No records found with id:' + JSON.stringify(err,undefined,2));
             }
         });
-        let l_image = "";
-        if(images.left_content_image != ""){
-            l_image = images.left_content_image;
-        }else{
-            if(existingContent.left_content_image != undefined){
-                l_image = existingContent.left_content_image
-            }
-        }
-
-        let r_image = "";
-        if(images.right_content_image != ""){
-            r_image = images.right_content_image;
-        }else{
-            if(existingContent.right_content_image != undefined){
-                r_image = existingContent.right_content_image
-            }
-        }
-        var content = {
-            about_type : req.body.about_type,
-            left_title : req.body.left_title,
-            left_content_type : req.body.left_content_type,
-            left_content_image : l_image,
-            left_content_text : req.body.left_content_text,
-            right_title : req.body.right_title,
-            right_content_type : req.body.right_content_type,
-            right_content_image : r_image,
-            right_content_text : req.body.right_content_text,
-        }
-    
-        Aboutus.findByIdAndUpdate(req.params.id, {$set:content}, {new:true}, (err,doc)=>{
-            if(!err){
-                res.send(doc)
-            }
-            else{
-                console.log('error is updating data:' + JSON.stringify(err,undefined,2));
-            }
-        })
     }
 })
 
