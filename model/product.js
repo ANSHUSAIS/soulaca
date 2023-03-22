@@ -1,8 +1,8 @@
 const mongoose = require ('mongoose');
 var Product = mongoose.model('Product', {
     productname : {type : String , required : true},
-    category :{type: mongoose.Schema.Types.ObjectId, ref: 'category', required: true},
-    subcategory :{type: mongoose.Schema.Types.ObjectId, ref: 'subcategory', required: true},
+    category :[{type: mongoose.Schema.Types.ObjectId, ref: 'category', required: true}],
+    subcategory :[{type: mongoose.Schema.Types.ObjectId, ref: 'subcategory', required: true}],
     size : {type: String , required : false},
     shortdescription : {type: String , required : true},
     shortfeatures : {type: String , required : true},

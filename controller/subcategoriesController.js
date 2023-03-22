@@ -41,20 +41,20 @@ router.get('/:id', (req,res)=>{
     }
 })
 
-router.get('/byCategory/:id', (req,res)=>{
-    if(!objId.isValid(req.params.id)){
-        res.status(400).send(`The requested Id is invalid :  ${req.params.id}`);
+router.post('/byCategory', (req,res)=>{
+    if(!req.body.categories){
+        res.status(400).send(`categories not found`);
     }
-    else{
-        Subcategory.find({category : req.params.id}, (err,doc)=>{
-            if(!err){
-                res.send(doc);
-            }
-            else{
-                console.log('No records found with id:' + JSON.stringify(err,undefined,2));
-            }
-        })
-    }
+    const categories = req.body.categories;
+
+    Subcategory.find({category :{ $in: categories }}, (err,doc)=>{
+        if(!err){
+            res.send(doc);
+        }
+        else{
+            console.log('No records found with id:' + JSON.stringify(err,undefined,2));
+        }
+    })
 })
 
 router.post('/', (req,res)=>{

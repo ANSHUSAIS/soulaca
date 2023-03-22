@@ -66,8 +66,10 @@ router.get('',(req, res)=>{
         }).populate({
             path: 'category',
             model: Category
+       }).populate({
+            path: 'subcategory',
+            model: Subcategory
        }).sort({_id : 'desc'})
-       
     }
     else{
         Product.find((err,docs)=>{
@@ -142,13 +144,14 @@ router.get('',(req, res)=>{
             path: 'subcategory',
             model: Subcategory
         })
-        }
+        } 
     })
 
 
 router.post('', upload.any(), (req,res)=>{
     // const url = req.protocol + "://" + req.get("host");
-
+    let categories = req.body.category.split(',');
+    let subcategories = req.body.subcategory.split(',');
     const productFinder = {
         model_number : req.body.model_number,
         display_size : req.body.display_size,
@@ -190,8 +193,8 @@ router.post('', upload.any(), (req,res)=>{
       }
     var product = new Product({
         productname : req.body.productname,
-        category : req.body.category,
-        subcategory : req.body.subcategory,
+        category : categories,
+        subcategory : subcategories,
         size : req.body.size,
         shortdescription: req.body.shortdescription,
         shortfeatures : req.body.shortfeatures,
@@ -322,6 +325,9 @@ router.put(("/:id"), upload.any(), (req, res, next) => {
         }
     }
 
+    let categories = req.body.category.split(',');
+    let subcategories = req.body.subcategory.split(',');
+
     const productFinder = {
         model_number : req.body.model_number,
         display_size : req.body.display_size,
@@ -352,8 +358,8 @@ router.put(("/:id"), upload.any(), (req, res, next) => {
     const product = {
         _id: req.body.id,
         productname : req.body.productname,
-        category : req.body.category,
-        subcategory : req.body.subcategory,
+        category : categories,
+        subcategory : subcategories,
         size : req.body.size,
         shortdescription : req.body.shortdescription,
         shortfeatures : req.body.shortfeatures,
@@ -400,10 +406,11 @@ router.put(("/:id"), upload.any(), (req, res, next) => {
 })
 
 router.get('/category/:id',(req, res)=>{
-        Product.find(  {category: req.params.id }  ,(err,docs)=>{
+        console.log('hellsow');
+        Product.find({},(err,docs)=>{
             if(!err){
                 res.send(docs);
-               console.log(docs); 
+                console.log(docs); 
             }
             else{
                 console.log('Error is fetching products:' +  JSON.stringify(err,undefined,2));
@@ -415,10 +422,10 @@ router.get('/category/:id',(req, res)=>{
 })
 
 router.get('/subcategory/:id',(req, res)=>{
-    Product.find( {subcategory: req.params.id }  ,(err,docs)=>{
+    Product.find({}  ,(err,docs)=>{
         if(!err){
             res.send(docs);
-           console.log(docs); 
+            console.log(docs); 
         }
         else{
             console.log('Error is fetching products:' +  JSON.stringify(err,undefined,2));
