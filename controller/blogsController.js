@@ -13,8 +13,8 @@ const mime_type ={
     "image/gif" : 'gif'
 }
 aws.config.update({
-    secretAccessKey: 'Q4z4BzMVtCc0LByylbnzHCIY9l12tZ6XD91KkHmC',
-    accessKeyId: 'AKIAJDVWBHRCBWZZ27IQ',
+    secretAccessKey: process.env.AWS_SECRET_KEY,
+    accessKeyId: process.env.AWS_SECRET_KEY_ID,
     region: 'ap-south-1'
 });
 
@@ -22,14 +22,14 @@ aws.config.update({
 var s3 = new aws.S3();
 var upload = multer({
     storage: multerS3({
-        s3: s3,
-        bucket: 'swicn-mean-app',
-        key: function (req, file, cb) {
-    var newFileName = Date.now() + "-" + file.originalname;
-    var fullPath = 'uploads/soulaca/images/'+ newFileName;
-    cb(null, fullPath);
-    console.log(fullPath);
-    path = fullPath;
+    s3: s3,
+    bucket: 'soulacabucket',
+    key: function (req, file, cb) {
+            var fileExt = file.originalname.split('.').pop();
+            var newFileName = Date.now() + "-" + Math.floor((Math.random() * 1000000)) + "." + fileExt;
+            var fullPath = 'uploads/images/blogs/'+ newFileName;
+            cb(null, fullPath);
+            path = fullPath;
         }
     })
 });

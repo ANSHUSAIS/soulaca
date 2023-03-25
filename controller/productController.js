@@ -8,7 +8,7 @@ let imagecolors = [];
 const multer = require('multer');
 const aws = require('aws-sdk');
 const multerS3 = require('multer-s3');
-const path = require( 'path' );
+let path;
 const mongoose = require ('mongoose');
 const { Subcategory } = require('../model/subcategory');
 const { Productenquiry } = require('../model/productenquiry');
@@ -19,22 +19,28 @@ const mime_type ={
     "image/gif" : 'gif'
 }
 aws.config.update({
-    secretAccessKey: 'Q4z4BzMVtCc0LByylbnzHCIY9l12tZ6XD91KkHmC',
-    accessKeyId: 'AKIAJDVWBHRCBWZZ27IQ',
+    secretAccessKey: process.env.AWS_SECRET_KEY,
+    accessKeyId: process.env.AWS_SECRET_KEY_ID,
     region: 'ap-south-1',
-    correctClockSkew: true,  
+    correctClockSkew: true,
 });
 
 var s3 = new aws.S3();
 var upload = multer({
     storage: multerS3({
         s3: s3,
-        bucket: 'swicn-mean-app',
-        key: function (req, file, cb){
-            cb( null, 'uploads/images/' + path.basename ( file.originalname, path.extname( file.originalname ) ) + '-' + Date.now() + path.extname( file.originalname ));
+        bucket: 'soulacabucket',
+        key: function (req, file, cb) {
+        var fileExt = file.originalname.split('.').pop();
+        var newFileName = Date.now() + "-" + Math.floor((Math.random() * 1000000)) + "." + fileExt;
+        var fullPath = 'uploads/images/products/'+ newFileName;
+        cb(null, fullPath);
+        path = fullPath;
+        console.log(path);
         }
     })
 });
+
 // const storage = multer.diskStorage({
 //     destination : function(req, file, cb){
 //         cb(null, '../backend/images');

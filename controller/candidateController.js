@@ -16,8 +16,8 @@ const mime_type ={
     "application/rtf" : 'rtf'
 }
 aws.config.update({
-    secretAccessKey: 'Q4z4BzMVtCc0LByylbnzHCIY9l12tZ6XD91KkHmC',
-    accessKeyId: 'AKIAJDVWBHRCBWZZ27IQ',
+    secretAccessKey: process.env.AWS_SECRET_KEY,
+    accessKeyId: process.env.AWS_SECRET_KEY_ID,
     region: 'ap-south-1'
 });
 
@@ -25,11 +25,11 @@ var s3 = new aws.S3();
 var upload = multer({
     storage: multerS3({
         s3: s3,
-        bucket: 'swicn-mean-app',
+        bucket: 'soulacabucket',
         key: function (req, file, cb) {
-           
-    var newFileName = Date.now() + "-" + file.originalname + '.pdf';
-    var fullPath = 'uploads/resume/'+ newFileName;
+        var fileExt = file.originalname.split('.').pop();
+        var newFileName = Date.now() + "-" + Math.floor((Math.random() * 1000000)) + "." + fileExt;
+        var fullPath = 'uploads/images/resume/'+ newFileName;
     cb(null, fullPath);
     path = fullPath;
         }

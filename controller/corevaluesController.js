@@ -25,8 +25,9 @@ var upload = multer({
         s3: s3,
         bucket: 'soulacabucket',
         key: function (req, file, cb) {
-        var newFileName = Date.now() + "-" + file.originalname;
-        var fullPath = 'uploads/images/'+ newFileName;
+        var fileExt = file.originalname.split('.').pop();
+        var newFileName = Date.now() + "-" + Math.floor((Math.random() * 1000000)) + "." + fileExt;
+        var fullPath = 'uploads/images/corevalues/'+ newFileName;
         cb(null, fullPath);
         path = url + fullPath;
         if(image == "")
