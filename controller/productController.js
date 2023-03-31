@@ -61,7 +61,7 @@ router.get('',(req, res)=>{
     var query = {}
     if(pageSize && currentPage){
         query.skip = pageSize * (currentPage - 1)
-  query.limit = pageSize
+    query.limit = pageSize
         Product.find({},{},query, function(err,data) {
             if(!err){
                 res.send(data)
@@ -90,8 +90,24 @@ router.get('',(req, res)=>{
             model: Category
        }).sort({_id : 'desc'})
     }
-
 })
+
+router.get('/suggestions',(req, res)=>{
+    const search_key = req.query.key;
+    const search_value = req.query.value;
+    let search_finder = {};
+    search_finder[`product_finder.${search_key}`] = {$regex: `/${search_value}/`, '$options' : 'i'}
+    Product.find(search_finder,(err,docs)=>{
+        if(!err){
+            res.send(docs);
+        }
+        else{
+            console.log('Error is fetching blogs:' +  JSON.stringify(err,undefined,2));
+        }
+    }).sort({_id : 'desc'})
+})
+
+
 // live search
 
 // router.get('',(req, res)=>{

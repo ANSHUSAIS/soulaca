@@ -23,6 +23,7 @@ var videoController = require('./controller/videoController');
 var promotionController = require('./controller/promotionController');
 var contentController = require('./controller/contentController');
 var corevalueController = require('./controller/corevaluesController');
+var companyController = require('./controller/companyController');
 
 mongoose
   .connect(
@@ -67,6 +68,7 @@ app.use('/api/banner', bannerController);
 app.use('/api/team', teamController);
 app.use('/api/products', productController);
 app.use('/api/user', authController);
+app.use('/api/company', companyController);
 app.use('/api/contact', contactController);
 app.use('/api/candidates', candidateController);
 app.use('/api/contentImages' , imageController);
