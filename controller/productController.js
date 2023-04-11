@@ -1,5 +1,6 @@
 const express = require ('express');
 var router = express.Router();
+var mailHelper = require("../utility/emailHelper");
 var {Product} = require('../model/product');
 var {Category} = require ('../model/categories');
 var docId= require('mongoose').Types.ObjectId;
@@ -424,7 +425,18 @@ router.put(("/:id"), upload.any(), (req, res, next) => {
         else{
             console.log('Error is fetching blogs:' +  JSON.stringify(err,undefined,2));
         }
-    }).sort({productname : 'asc'})
+    }).sort({productname : 'asc'}).limit(4)
+})
+
+router.delete('/enquiry/delete/:id',(req, res)=>{
+    Productenquiry.findByIdAndRemove(req.params.id, (err,docs)=>{
+        if(!err){
+            res.send(docs);
+        }
+        else{
+            console.log('error in deleting member:' + JSON.stringify(err,undefined,2));
+        }
+    })
 })
 
 router.get('/category/:id',(req, res)=>{
@@ -500,6 +512,26 @@ router.post('/popup-message', upload.any(), (req,res)=>{
         })
         productenquiry.save((err,docs)=>{
             if(!err){
+                mailHelper({
+                    to: 'anshu.sais2019@gmail.com',
+                    from: 'beherasangram2017@gmail.com',
+                    subject: 'Product Enquiry',
+                    text: 'You Have Got A New Product Enquiry',
+                    html: `<h1 style="text-align:center"> New message from</h1><br>
+                    <ul style="list-style-type:none">
+                    <li><h3>Name : ${req.body.name}</h3></li>
+                    <li><h3>Contact No. : ${req.body.mobile}</h3></li>
+                    <li><h3>Product URL : ${req.body.product_url}</h3></li>
+                    <li><h3 style="text-decoration:underline">Message</h3></li><br><br>
+                    <div style="width:100%; height:80px;overflow-y:auto;padding:10px;border:1px dashed black">
+                        ${req.body.message}
+                    </div>
+                    </ul>`
+                }).then((elem)=>{
+                    console.log(elem)
+                }).catch((error)=>{
+                    console.log(error)
+                })
                 res.send(docs)
             }
             else{
@@ -510,6 +542,7 @@ router.post('/popup-message', upload.any(), (req,res)=>{
         console.log(err);
     }
 })
+
 
 router.get('/data/enquiry',(req, res)=>{
     const pageSize = +req.query.pageSize;
@@ -532,7 +565,7 @@ router.get('/data/enquiry',(req, res)=>{
             if(!err){
                 res.send(docs);
             }
-            else{
+            else{   
                 console.log('Error is fetching blogs:' +  JSON.stringify(err,undefined,2));
             }
         })
