@@ -343,7 +343,7 @@ router.put(("/:id"), upload.any(), (req, res, next) => {
         for ( let i = 0; i < fileArray.length; i++ ) {
         fileLocation = fileArray[ i ].location;
     
-        console.log( 'filenm', fileLocation );
+        console.log('filenm', fileLocation );
         galleryImgLocationArray.push( fileLocation )
         }
     }
@@ -513,8 +513,8 @@ router.post('/popup-message', upload.any(), (req,res)=>{
         productenquiry.save((err,docs)=>{
             if(!err){
                 mailHelper({
-                    to: 'anshu.sais2019@gmail.com',
-                    from: 'beherasangram2017@gmail.com',
+                    to: 'mail.yogeshpmishra@gmail.com',
+                    from: 'soulaca.swi@gmail.com',
                     subject: 'Product Enquiry',
                     text: 'You Have Got A New Product Enquiry',
                     html: `<h1 style="text-align:center"> New message from</h1><br>
