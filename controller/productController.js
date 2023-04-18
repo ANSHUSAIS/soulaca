@@ -513,7 +513,7 @@ router.post('/popup-message', upload.any(), (req,res)=>{
         productenquiry.save((err,docs)=>{
             if(!err){
                 mailHelper({
-                    to: 'mail.yogeshpmishra@gmail.com',
+                    to: 'soulaca@swi-cn.com',
                     from: 'soulaca.swi@gmail.com',
                     subject: 'Product Enquiry',
                     text: 'You Have Got A New Product Enquiry',
